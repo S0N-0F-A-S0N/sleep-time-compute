@@ -18,6 +18,7 @@ from tqdm import tqdm
 from letta_client import Letta, LlmConfig, MessageCreate
 
 import logging
+from functools import lru_cache
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
@@ -48,6 +49,7 @@ def rethink_memory(agent_state: "AgentState", new_memory: str, target_block_labe
         agent_state.memory.update_block_value(label=target_block_label, value=new_memory)
     return None
 
+@lru_cache(maxsize=None)
 def get_prompt_text(filename: str, block: str) -> str:
     with open(f"prompts/{block}/{filename}.txt", "r") as f:
         return f.read()

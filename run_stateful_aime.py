@@ -17,6 +17,7 @@ import time
 import jsonlines
 from tqdm import tqdm
 import datasets
+from functools import lru_cache
 
 from letta_client import Letta, LlmConfig, MessageCreate, LettaUsageStatistics
 
@@ -53,6 +54,7 @@ def rethink_memory(agent_state: "AgentState", new_memory: str, target_block_labe
         agent_state.memory.update_block_value(label=target_block_label, value=new_memory)
     return None
 
+@lru_cache(maxsize=None)
 def get_prompt_text(filename: str, block: str) -> str:
     with open(f"prompts/{block}/{filename}.txt", "r") as f:
         return f.read()
